@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Miner - Космический тайкун</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container" class="day clear">
+        <div id="weather-effects"></div>
+        <div id="time-of-day"></div>
+        <div id="season-indicator"></div>
+        
+        <div id="header">
+            <h1>Cosmic Miner</h1>
+            <div id="stats">
+                <div class="stat">
+                    <span id="ores-count">0</span>
+                    <span class="stat-label">Руда</span>
+                </div>
+                <div class="stat">
+                    <span id="ores-per-second">0</span>
+                    <span class="stat-label">Руда/сек</span>
+                </div>
+                <div class="stat">
+                    <span id="luck">100%</span>
+                    <span class="stat-label">Удача</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="main-content">
+            <div id="mine-area">
+                <button id="mine-button">Добыть руду</button>
+                <div id="mine-animation"></div>
+                <div id="critical-hit">CRITICAL HIT!</div>
+            </div>
+            
+            <div id="upgrades">
+                <h2>Майнеры</h2>
+                <div id="miners-list"></div>
+                
+                <h2>Улучшения</h2>
+                <div id="upgrades-list"></div>
+            </div>
+            
+            <div id="ores-info">
+                <h2>Инфо о руде</h2>
+                <div id="ores-log"></div>
+            </div>
+        </div>
+        
+        <div id="notification-center"></div>
+        
+        <div id="prestige">
+            <h2>Превосходство</h2>
+            <button id="prestige-button" disabled>Перерождение (0/1000)</button>
+            <p id="prestige-bonus">Бонус перерождения: +0% к добыче</p>
+        </div>
+    </div>
+    
+    <audio id="mine-sound" src="sounds/mine.wav" preload="auto"></audio>
+    <audio id="critical-sound" src="sounds/critical.wav" preload="auto"></audio>
+    <audio id="buy-sound" src="sounds/buy.wav" preload="auto"></audio>
+    
+    <script src="game.js"></script>
+</body>
+</html>

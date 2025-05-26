@@ -1,0 +1,570 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    background-color: #0a0a1a;
+    color: #e0e0e0;
+    overflow-x: hidden;
+}
+
+#game-container {
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    transition: all 0.5s ease;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Времена дня */
+.day {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+.night {
+    background: linear-gradient(135deg, #0a0a1a 0%, #000033 100%);
+    color: #b0b0b0;
+}
+
+/* Погода */
+.clear {
+    background-image: url('images/bg-clear.png');
+}
+.rain {
+    background-image: url('images/bg-rain.png');
+}
+.snow {
+    background-image: url('images/bg-snow.png');
+}
+.sandstorm {
+    background-image: url('images/bg-sand.png');
+}
+
+/* Времена года */
+.spring .season-effect {
+    background: linear-gradient(135deg, rgba(75, 200, 100, 0.1) 0%, transparent 100%);
+}
+.summer .season-effect {
+    background: linear-gradient(135deg, rgba(255, 200, 50, 0.1) 0%, transparent 100%);
+}
+.autumn .season-effect {
+    background: linear-gradient(135deg, rgba(200, 100, 50, 0.1) 0%, transparent 100%);
+}
+.winter .season-effect {
+    background: linear-gradient(135deg, rgba(200, 230, 255, 0.1) 0%, transparent 100%);
+}
+
+#weather-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#time-of-day {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.3;
+}
+
+#season-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0.2;
+}
+
+#header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(10, 10, 30, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #4fc3f7;
+    text-shadow: 0 0 10px rgba(79, 195, 247, 0.7);
+}
+
+#stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.stat {
+    background: rgba(20, 20, 50, 0.8);
+    padding: 15px 25px;
+    border-radius: 8px;
+    min-width: 120px;
+    box-shadow: 0 0 15px rgba(0, 0, 255, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 255, 0.4);
+}
+
+.stat span {
+    display: block;
+    text-align: center;
+}
+
+.stat span:first-child {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4fc3f7;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-top: 5px;
+}
+
+#main-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    z-index: 10;
+    justify-content: center;
+}
+
+#mine-area {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background: rgba(20, 20, 50, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+    text-align: center;
+    position: relative;
+}
+
+#mine-button {
+    background: linear-gradient(135deg, #4fc3f7 0%, #1976d2 100%);
+    border: none;
+    color: white;
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 255, 0.4);
+    transition: all 0.3s;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+#mine-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 255, 0.6);
+}
+
+#mine-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(0, 0, 255, 0.4);
+}
+
+#mine-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+#mine-button:hover::after {
+    opacity: 1;
+    top: -30%;
+    left: -30%;
+}
+
+#mine-animation {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    background-image: url('images/mine-animation.png');
+    background-size: cover;
+    position: relative;
+}
+
+#critical-hit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffeb3b;
+    text-shadow: 0 0 10px #ff5722;
+    opacity: 0;
+    z-index: 20;
+    animation: criticalAnimation 1.5s ease-out;
+}
+
+@keyframes criticalAnimation {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -100%) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -200%) scale(1.5);
+    }
+}
+
+#upgrades {
+    flex: 2;
+    min-width: 300px;
+    background: rgba(20, 20, 50, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+}
+
+#miners-list, #upgrades-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.miner, .upgrade {
+    background: rgba(30, 30, 60, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4fc3f7;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.miner:hover, .upgrade:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 255, 0.4);
+    background: rgba(40, 40, 80, 0.8);
+}
+
+.miner-name {
+    font-weight: bold;
+    color: #4fc3f7;
+    margin-bottom: 5px;
+}
+
+.miner-stats, .upgrade-stats {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-bottom: 10px;
+}
+
+.miner-cost, .upgrade-cost {
+    font-weight: bold;
+    color: #ffeb3b;
+}
+
+.buy-button {
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.buy-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 255, 0, 0.3);
+}
+
+.buy-button:disabled {
+    background: linear-gradient(135deg, #616161 0%, #424242 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.miner-owned, .upgrade-owned {
+    font-size: 0.8rem;
+    color: #81c784;
+    margin-top: 5px;
+}
+
+#ores-info {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(20, 20, 50, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+}
+
+#ores-log {
+    margin-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.ore-log-entry {
+    background: rgba(30, 30, 60, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.ore-log-entry.common {
+    border-left-color: #9e9e9e;
+}
+.ore-log-entry.uncommon {
+    border-left-color: #4caf50;
+}
+.ore-log-entry.rare {
+    border-left-color: #2196f3;
+}
+.ore-log-entry.epic {
+    border-left-color: #9c27b0;
+}
+.ore-log-entry.legendary {
+    border-left-color: #ff9800;
+}
+.ore-log-entry.mythic {
+    border-left-color: #f44336;
+}
+
+.ore-name {
+    font-weight: bold;
+}
+
+.ore-amount {
+    color: #ffeb3b;
+    font-weight: bold;
+}
+
+.ore-time {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+    float: right;
+}
+
+#notification-center {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 100;
+}
+
+.notification {
+    background: rgba(20, 20, 50, 0.9);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 5px solid #4fc3f7;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.5s, fadeOut 0.5s 4.5s forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; }
+}
+
+.notification::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #4fc3f7;
+    animation: notificationTimer 5s linear;
+}
+
+@keyframes notificationTimer {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.notification-title {
+    font-weight: bold;
+    color: #4fc3f7;
+    margin-bottom: 5px;
+}
+
+#prestige {
+    margin-top: 30px;
+    background: rgba(20, 20, 50, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.3);
+    text-align: center;
+}
+
+#prestige-button {
+    background: linear-gradient(135deg, #ff5722 0%, #e91e63 100%);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s;
+    margin: 15px 0;
+}
+
+#prestige-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+}
+
+#prestige-button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(255, 0, 0, 0.4);
+}
+
+#prestige-button:disabled {
+    background: linear-gradient(135deg, #616161 0%, #424242 100%);
+    cursor: not-allowed;
+}
+
+#prestige-bonus {
+    font-size: 1.1rem;
+    color: #ffeb3b;
+}
+
+/* Анимации погоды */
+.rain-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('images/rain.png');
+    animation: rain 0.8s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes rain {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+.snow-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('images/snow.png');
+    animation: snow 10s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes snow {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 500px 1000px, 300px 800px; }
+}
+
+.sand-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url('images/sand.png');
+    animation: sand 5s linear infinite;
+    opacity: 0.4;
+}
+
+@keyframes sand {
+    0% { background-position: 0 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.day-night-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.day-effect {
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 200, 0.1) 0%, transparent 50%);
+}
+
+.night-effect {
+    background: radial-gradient(circle at 80% 30%, rgba(100, 100, 255, 0.05) 0%, transparent 40%);
+    box-shadow: inset 0 0 100px rgba(0, 0, 100, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    #stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stat {
+        width: 100%;
+    }
+    
+    #mine-button {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+}
